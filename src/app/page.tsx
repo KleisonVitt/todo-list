@@ -13,6 +13,24 @@ import {
   Sigma,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const Home = () => {
   return (
@@ -47,7 +65,23 @@ const Home = () => {
                 <div className="w-1 h-full bg-green-400"></div>
                 <p className="flex-1 px-2 text-sm">Estudar ReactJS</p>
                 <div className="flex items-center gap-2">
-                  <SquarePen size={16} className="cursor-pointer" />
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <SquarePen size={16} className="cursor-pointer" />
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>
+                          <p>Editar tarefa</p>
+                        </DialogTitle>
+                      </DialogHeader>
+
+                      <div className="flex gap-2">
+                        <Input placeholder="Editar tarefa" />
+                        <Button className="cursor-pointer">Editar</Button>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
                   <Trash size={16} className="cursor-pointer" />
                 </div>
               </div>
@@ -58,9 +92,33 @@ const Home = () => {
                 <ListCheck size={16} />
                 <p className="text-xs">Tarefas concluídas (3/3)</p>
               </div>
-              <Button variant="outline" className="text-xs h-7 cursor-pointer">
-                <Trash /> Limpar tarefas concluídas
-              </Button>
+
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="text-xs h-7 cursor-pointer"
+                  >
+                    <Trash /> Limpar tarefas concluídas
+                  </Button>
+                </AlertDialogTrigger>
+
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Tem certeza que deseja excluir xxx itens?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. This will permanently delete
+                      your account and remove your data from our servers.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogAction>Continuar</AlertDialogAction>
+                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
 
             <div className="h-2 w-full bg-gray-200 mt-4 rounded-md">
