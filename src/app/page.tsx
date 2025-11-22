@@ -3,7 +3,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Plus, List, Check, SquarePen, Trash } from "lucide-react";
+import {
+  Plus,
+  List,
+  Check,
+  SquarePen,
+  Trash,
+  ListCheck,
+  Sigma,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const Home = () => {
@@ -23,13 +31,13 @@ const Home = () => {
             <Separator className="mb-4" />
 
             <div className="flex gap-2">
-              <Badge className="cursor-pointer">
+              <Badge variant="default" className="cursor-pointer">
                 <List /> Todas
               </Badge>
-              <Badge className="cursor-pointer">
+              <Badge variant="outline" className="cursor-pointer">
                 <Check /> Não finalizadas
               </Badge>
-              <Badge className="cursor-pointer">
+              <Badge variant="outline" className="cursor-pointer">
                 <Check /> Concluídas
               </Badge>
             </div>
@@ -43,6 +51,28 @@ const Home = () => {
                   <Trash size={16} className="cursor-pointer" />
                 </div>
               </div>
+            </div>
+
+            <div className="flex justify-between mt-4">
+              <div className="flex gap-2 items-center">
+                <ListCheck size={16} />
+                <p className="text-xs">Tarefas concluídas (3/3)</p>
+              </div>
+              <Button variant="outline" className="text-xs h-7 cursor-pointer">
+                <Trash /> Limpar tarefas concluídas
+              </Button>
+            </div>
+
+            <div className="h-2 w-full bg-gray-200 mt-4 rounded-md">
+              <div
+                className="h-full  bg-blue-500 rounded-md"
+                style={{ width: "50%" }}
+              ></div>
+            </div>
+
+            <div className="flex justify-end mt-4 text-xs items-center gap-2">
+              <Sigma size={18} />
+              <p>3 tarefas no total</p>
             </div>
           </CardContent>
         </Card>
