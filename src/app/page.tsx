@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -19,12 +19,22 @@ import {
 } from "@/components/ui/alert-dialog";
 import EditTask from "@/components/EditTask";
 import { getTasks } from "@/actions/getTasks";
+import { Task } from "../../generated/prisma/client";
 
 const Home = () => {
+  const [taskList, setTaskList] = useState<Task[]>([]);
+
   const handleGetTasks = async () => {
     const tasks = await getTasks();
-    console.log(tasks);
+
+    if (!tasks) return;
+
+    setTaskList(tasks);
   };
+
+  useEffect(() => {
+    handleGetTasks();
+  }, []);
 
   return (
     <>
@@ -37,8 +47,6 @@ const Home = () => {
               Cadastrar
             </Button>
           </CardHeader>
-
-          <Button onClick={handleGetTasks}>Teste</Button>
 
           <CardContent>
             <Separator className="mb-4" />
@@ -56,16 +64,20 @@ const Home = () => {
             </div>
 
             <div className="mt-4 border-b">
-              <div className=" h-14 flex justify-between items-center border-t">
-                <div className="w-1 h-full bg-green-400"></div>
-                <p className="flex-1 px-2 text-sm">Estudar ReactJS</p>
-                <div className="flex items-center gap-2">
-                  <EditTask />
-                  <Trash size={16} className="cursor-pointer" />
+              {taskList.map((task) => (
+                <div
+                  className=" h-14 flex justify-between items-center border-t"
+                  key={task.id}
+                >
+                  <div className="w-1 h-full bg-green-400"></div>
+                  <p className="flex-1 px-2 text-sm">{task.title}</p>
+                  <div className="flex items-center gap-2">
+                    <EditTask />
+                    <Trash size={16} className="cursor-pointer" />
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
-
             <div className="flex justify-between mt-4">
               <div className="flex gap-2 items-center">
                 <ListCheck size={16} />
