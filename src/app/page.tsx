@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,8 +18,14 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import EditTask from "@/components/EditTask";
+import { getTasks } from "@/actions/getTasks";
 
 const Home = () => {
+  const handleGetTasks = async () => {
+    const tasks = await getTasks();
+    console.log(tasks);
+  };
+
   return (
     <>
       <main className="w-full h-screen bg-gray-100 flex justify-center items-center">
@@ -30,6 +37,8 @@ const Home = () => {
               Cadastrar
             </Button>
           </CardHeader>
+
+          <Button onClick={handleGetTasks}>Teste</Button>
 
           <CardContent>
             <Separator className="mb-4" />
