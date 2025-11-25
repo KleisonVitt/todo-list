@@ -19,17 +19,53 @@ import {
 } from "@/components/ui/alert-dialog";
 import EditTask from "@/components/EditTask";
 import { getTasks } from "@/actions/getTasks";
+import { newTask } from "@/actions/newTask";
+import { deleteTask } from "@/actions/deleteTask";
 import { Task } from "../../generated/prisma/client";
 
 const Home = () => {
   const [taskList, setTaskList] = useState<Task[]>([]);
+  const [task, setTask] = useState<string>("");
 
   const handleGetTasks = async () => {
-    const tasks = await getTasks();
+    try {
+      const tasks = await getTasks();
 
-    if (!tasks) return;
+      if (!tasks) return;
 
-    setTaskList(tasks);
+      setTaskList(tasks);
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const handleAddTask = async () => {
+    try {
+      if (task.length === 0 || !task) return;
+
+      const newAddedTask = await newTask(task);
+
+      if (!newAddedTask) return;
+
+      setTask("");
+      await handleGetTasks();
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const handleDeleteTask = async (id: string) => {
+    try {
+      if (!id) return;
+
+      const deletedTask = await deleteTask(id);
+
+      if (!deletedTask) return;
+
+      await handleGetTasks();
+    } catch (error) {
+      throw error;
+    }
   };
 
   useEffect(() => {
@@ -41,8 +77,12 @@ const Home = () => {
       <main className="w-full h-screen bg-gray-100 flex justify-center items-center">
         <Card className="w-lg">
           <CardHeader className="flex gap-2">
-            <Input placeholder="Adicioanr tarefa" />
-            <Button className="cursor-pointer">
+            <Input
+              placeholder="Adicioanr tarefa"
+              value={task}
+              onChange={(e) => setTask(e.target.value)}
+            />
+            <Button className="cursor-pointer" onClick={handleAddTask}>
               <Plus />
               Cadastrar
             </Button>
@@ -73,7 +113,11 @@ const Home = () => {
                   <p className="flex-1 px-2 text-sm">{task.title}</p>
                   <div className="flex items-center gap-2">
                     <EditTask />
-                    <Trash size={16} className="cursor-pointer" />
+                    <Trash
+                      size={16}
+                      className="cursor-pointer"
+                      onClick={() => handleDeleteTask(task.id)}
+                    />
                   </div>
                 </div>
               ))}

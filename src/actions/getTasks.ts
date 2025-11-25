@@ -2,10 +2,13 @@
 import { prisma } from "@/utils/prismaClient";
 
 export const getTasks = async () => {
-  const tasks = prisma.task.findMany();
+  try {
+    const tasks = prisma.task.findMany();
 
-  if (!tasks) return;
+    if (!tasks) return;
 
-  console.log(tasks);
-  return tasks;
+    return tasks;
+  } catch (error) {
+    throw error;
+  }
 };
