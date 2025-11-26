@@ -18,10 +18,11 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import EditTask from "@/components/EditTask";
+import { Task } from "../../generated/prisma/client";
 import { getTasks } from "@/actions/getTasks";
 import { newTask } from "@/actions/newTask";
 import { deleteTask } from "@/actions/deleteTask";
-import { Task } from "../../generated/prisma/client";
+import { updateTaskCompletion } from "@/actions/toggleTaskCompletion";
 import { toast } from "sonner";
 
 const Home = () => {
@@ -71,6 +72,31 @@ const Home = () => {
     }
   };
 
+  const handleToggleTaskCompletion = async (taskId: string) => {
+    const previousTasks = [...taskList];
+
+    try {
+      setTaskList((prev) => {
+        const updatedTaskList = prev.map((task) => {
+          if (task.id === taskId) {
+            return {
+              ...task,
+              completed: !task.completed,
+            };
+          } else {
+            return task;
+          }
+        });
+        return updatedTaskList;
+      });
+
+      await updateTaskCompletion(taskId);
+    } catch (error) {
+      setTaskList(previousTasks);
+      throw error;
+    }
+  };
+
   useEffect(() => {
     handleGetTasks();
   }, []);
@@ -112,8 +138,19 @@ const Home = () => {
                   className=" h-14 flex justify-between items-center border-t"
                   key={task.id}
                 >
-                  <div className="w-1 h-full bg-green-400"></div>
-                  <p className="flex-1 px-2 text-sm">{task.title}</p>
+                  <div
+                    className={`${
+                      task.completed
+                        ? "w-1 h-full bg-green-400"
+                        : "w-1 h-full bg-red-400"
+                    }`}
+                  ></div>
+                  <p
+                    className="flex-1 px-2 text-sm cursor-pointer hover:text-gray-700"
+                    onClick={() => handleToggleTaskCompletion(task.id)}
+                  >
+                    {task.title}
+                  </p>
                   <div className="flex items-center gap-2">
                     <EditTask />
                     <Trash
