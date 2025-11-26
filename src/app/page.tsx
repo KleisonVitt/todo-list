@@ -22,6 +22,7 @@ import { getTasks } from "@/actions/getTasks";
 import { newTask } from "@/actions/newTask";
 import { deleteTask } from "@/actions/deleteTask";
 import { Task } from "../../generated/prisma/client";
+import { toast } from "sonner";
 
 const Home = () => {
   const [taskList, setTaskList] = useState<Task[]>([]);
@@ -48,6 +49,7 @@ const Home = () => {
       if (!newAddedTask) return;
 
       setTask("");
+      toast.success("Tarefa adicionada com sucesso!");
       await handleGetTasks();
     } catch (error) {
       throw error;
@@ -62,6 +64,7 @@ const Home = () => {
 
       if (!deletedTask) return;
 
+      toast.warning("Tarefa deletada com sucesso!");
       await handleGetTasks();
     } catch (error) {
       throw error;
