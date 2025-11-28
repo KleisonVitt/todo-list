@@ -152,7 +152,7 @@ const Home = () => {
                     {task.title}
                   </p>
                   <div className="flex items-center gap-2">
-                    <EditTask />
+                    <EditTask task={task} handleGetTasks={handleGetTasks} />
                     <Trash
                       size={16}
                       className="cursor-pointer"
