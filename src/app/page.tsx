@@ -4,7 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Plus, List, Check, Trash, ListCheck, Sigma } from "lucide-react";
+import {
+  Plus,
+  List,
+  Check,
+  Trash,
+  ListCheck,
+  Sigma,
+  LoaderCircle,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import {
   AlertDialog,
@@ -28,6 +36,7 @@ import { toast } from "sonner";
 const Home = () => {
   const [taskList, setTaskList] = useState<Task[]>([]);
   const [task, setTask] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleGetTasks = async () => {
     try {
@@ -42,8 +51,13 @@ const Home = () => {
   };
 
   const handleAddTask = async () => {
+    setLoading(true);
     try {
-      if (task.length === 0 || !task) return;
+      if (task.length === 0 || !task) {
+        toast.error("Insira uam atividade!");
+        setLoading(false);
+        return;
+      }
 
       const newAddedTask = await newTask(task);
 
@@ -55,6 +69,7 @@ const Home = () => {
     } catch (error) {
       throw error;
     }
+    setLoading(false);
   };
 
   const handleDeleteTask = async (id: string) => {
@@ -112,7 +127,7 @@ const Home = () => {
               onChange={(e) => setTask(e.target.value)}
             />
             <Button className="cursor-pointer" onClick={handleAddTask}>
-              <Plus />
+              {loading ? <LoaderCircle className="animate-spin" /> : <Plus />}
               Cadastrar
             </Button>
           </CardHeader>
