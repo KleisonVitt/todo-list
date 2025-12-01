@@ -25,6 +25,7 @@ import { updateTaskCompletion } from "@/actions/toggleTaskCompletion";
 import { toast } from "sonner";
 import Filter from "@/components/Filter";
 import { FilterType } from "@/components/Filter";
+import { deleteCompletedTasks } from "@/actions/clearCompletedTasks";
 
 const Home = () => {
   const [taskList, setTaskList] = useState<Task[]>([]);
@@ -107,10 +108,19 @@ const Home = () => {
     }
   };
 
+  const clearCompletedTasks = async () => {
+    const deletedTasks = await deleteCompletedTasks();
+
+    if (!deletedTasks) return;
+
+    setTaskList(deletedTasks);
+  };
+
   useEffect(() => {
     handleGetTasks();
   }, []);
 
+  // Filtro de tarefas
   useEffect(() => {
     switch (currentFilter) {
       case "all":
@@ -217,8 +227,15 @@ const Home = () => {
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogAction>Continuar</AlertDialogAction>
-                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                    <AlertDialogAction
+                      className="cursor-pointer"
+                      onClick={clearCompletedTasks}
+                    >
+                      Continuar
+                    </AlertDialogAction>
+                    <AlertDialogCancel className="cursor-pointer">
+                      Cancelar
+                    </AlertDialogCancel>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
