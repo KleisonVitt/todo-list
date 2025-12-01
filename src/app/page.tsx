@@ -31,6 +31,7 @@ const Home = () => {
   const [task, setTask] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [currentFilter, setCurrentFilter] = useState<FilterType>("all");
+  const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
 
   const handleGetTasks = async () => {
     try {
@@ -110,6 +111,22 @@ const Home = () => {
     handleGetTasks();
   }, []);
 
+  useEffect(() => {
+    switch (currentFilter) {
+      case "all":
+        setFilteredTasks(taskList);
+        break;
+      case "pending":
+        const pendingTasks = taskList.filter((task) => !task.completed);
+        setFilteredTasks(pendingTasks);
+        break;
+      case "fineshed":
+        const completedTasks = taskList.filter((task) => task.completed);
+        setFilteredTasks(completedTasks);
+        break;
+    }
+  }, [currentFilter, taskList]);
+
   return (
     <>
       <main className="w-full h-screen bg-gray-100 flex justify-center items-center">
@@ -140,7 +157,7 @@ const Home = () => {
                   Nenhuma atividade cadastrada
                 </p>
               )}
-              {taskList.map((task) => (
+              {filteredTasks.map((task) => (
                 <div
                   className=" h-14 flex justify-between items-center border-t"
                   key={task.id}
@@ -172,7 +189,7 @@ const Home = () => {
             <div className="flex justify-between mt-4">
               <div className="flex gap-2 items-center">
                 <ListCheck size={16} />
-                <p className="text-xs">Tarefas concluídas (3/3)</p>
+                <p className="text-xs">Tarefas concluídas (3/3) </p>
               </div>
 
               <AlertDialog>
