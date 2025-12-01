@@ -4,16 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import {
-  Plus,
-  List,
-  Check,
-  Trash,
-  ListCheck,
-  Sigma,
-  LoaderCircle,
-} from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Plus, Trash, ListCheck, Sigma, LoaderCircle } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -32,11 +23,14 @@ import { newTask } from "@/actions/newTask";
 import { deleteTask } from "@/actions/deleteTask";
 import { updateTaskCompletion } from "@/actions/toggleTaskCompletion";
 import { toast } from "sonner";
+import Filter from "@/components/Filter";
+import { FilterType } from "@/components/Filter";
 
 const Home = () => {
   const [taskList, setTaskList] = useState<Task[]>([]);
   const [task, setTask] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [currentFilter, setCurrentFilter] = useState<FilterType>("all");
 
   const handleGetTasks = async () => {
     try {
@@ -135,19 +129,17 @@ const Home = () => {
           <CardContent>
             <Separator className="mb-4" />
 
-            <div className="flex gap-2">
-              <Badge variant="default" className="cursor-pointer">
-                <List /> Todas
-              </Badge>
-              <Badge variant="outline" className="cursor-pointer">
-                <Check /> Não finalizadas
-              </Badge>
-              <Badge variant="outline" className="cursor-pointer">
-                <Check /> Concluídas
-              </Badge>
-            </div>
+            <Filter
+              currentFilter={currentFilter}
+              setCurrentFilter={setCurrentFilter}
+            />
 
             <div className="mt-4 border-b">
+              {taskList.length === 0 && (
+                <p className="text-xs border-t py-4">
+                  Nenhuma atividade cadastrada
+                </p>
+              )}
               {taskList.map((task) => (
                 <div
                   className=" h-14 flex justify-between items-center border-t"
