@@ -189,7 +189,11 @@ const Home = () => {
             <div className="flex justify-between mt-4">
               <div className="flex gap-2 items-center">
                 <ListCheck size={16} />
-                <p className="text-xs">Tarefas concluídas (3/3) </p>
+                <p className="text-xs">
+                  Tarefas concluídas (
+                  {taskList.filter((task) => task.completed).length} /
+                  {taskList.length})
+                </p>
               </div>
 
               <AlertDialog>
@@ -229,7 +233,7 @@ const Home = () => {
 
             <div className="flex justify-end mt-4 text-xs items-center gap-2">
               <Sigma size={18} />
-              <p>3 tarefas no total</p>
+              <p>{taskList.length} tarefas no total</p>
             </div>
           </CardContent>
         </Card>
